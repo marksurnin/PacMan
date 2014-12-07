@@ -10,6 +10,7 @@ class Board:
         self.pacmanx = 0
         self.pacmany = 0
         self.pacman = Pacman(0,0)
+        self.score = 0
 
         for line in fp:
             self.board.append(list(line.strip()))
@@ -24,13 +25,21 @@ class Board:
                 elif self.board[row][col] == 'o':
                     fill(200,200,200)
                     rect(30*col, row*30, 30, 30)
+                    fill(0, 0, 0)
+                    ellipse(30*col+15, 30*row+15, 10, 10)
                 elif self.board[row][col] == '_':
-                    fill(0,0,0)
+                    fill(200, 200, 200)
                     rect(30*col, row*30, 30, 30)
                 elif self.board[row][col] == '@':
                     fill(255,255,0)
                     rect(30*col, row*30, 30, 30)
                     self.pacman.update(col,row,self.pacman.cur_direction)
+
+        
+        textSize(32)  #Printing Score
+        fill(0,102,153)
+        print(self.score)
+        text('Score:' + str(self.score), 320, 445)
         #print(self.pacman.x, self.pacman.y)
         '''
                 elif self.board[row][col] == 'M':
@@ -59,22 +68,32 @@ class Board:
 
     def move_pacman(self, move_direction):
         self.move_direction = move_direction
+        print(self.board[self.pacman.y][self.pacman.x])
         if move_direction == 'left':
+            if self.board[self.pacman.y][self.pacman.x - 1] == 'o':
+                self.score += 1
+                
             self.board[self.pacman.y][self.pacman.x] = '_'                
             self.board[self.pacman.y][self.pacman.x - 1] = '@'
             self.pacman.x -= 1
             
         if move_direction == 'right':
+            if self.board[self.pacman.y][self.pacman.x + 1] == 'o':
+                self.score += 1
             self.board[self.pacman.y][self.pacman.x] = '_'                
             self.board[self.pacman.y][self.pacman.x + 1] = '@'
             self.pacman.x += 1
     
         if move_direction == 'up':
+            if self.board[self.pacman.y - 1][self.pacman.x] == 'o':
+                self.score += 1
             self.board[self.pacman.y][self.pacman.x] = '_'                
             self.board[self.pacman.y - 1][self.pacman.x] = '@'
             self.pacman.y -= 1
 
         if move_direction == 'down':
+            if self.board[self.pacman.y + 1][self.pacman.x] == 'o':
+                self.score += 1
             self.board[self.pacman.y][self.pacman.x] = '_'                
             self.board[self.pacman.y + 1][self.pacman.x] = '@'
             self.pacman.y += 1
@@ -91,7 +110,7 @@ class Pacman:
         self.x = row
         self.y = col
         self.cur_direction = dir
-'''                
+            
 class Monster:
     def __init__(self, x, y):
         self.x = x
@@ -110,14 +129,14 @@ class Monster:
             
         return choices
         
-     def move_monster(self):
+    def move_monster(self):
         direction = random.choice(['left', 'right', 'up', 'down'])
         if direction == 'left':
             if self.board[self.monster.y][self.pacman.x - 1] != 'X':
                 self.board[self.pacman.y][self.pacman.x] = '_'                
                 self.board[self.pacman.y][self.pacman.x - 1] = '@'
                 self.pacman.x -= 1 
-'''                        
+                      
 
 def setup():
     size(750, 450)
